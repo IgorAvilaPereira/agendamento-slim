@@ -1,0 +1,6 @@
+<h1>Agendamentos</h1>
+<ul>
+    {% for chave, agendamento in vetAgendamento %}
+        <li>{{ chave }}: {{ agendamento.data }}</li>
+    {% endfor %}
+</ul>
