@@ -84,15 +84,23 @@ $app->post('/adicionar_agendamento', function (Request $request, Response $respo
     return $response;
 });
 
-$app->get('/tela_editar_agendamento', function (Request $request, Response $response, $args) {
+$app->get('/tela_editar_agendamento/{id}', function (Request $request, Response $response, $args) {
     $view = Twig::fromRequest($request);
-    return $view->render($response, 'tela_editar.html'/* , [
-              'name' => $args['name'],
-              ] */);
+    $mysqli = new mysqli("localhost", "root", "root", "agendamento");
+    $result = $mysqli->query("SELECT * FROM agendamentos where id = ".$args['id']);
+    $row = $result->fetch_array(MYSQLI_ASSOC);
+    return $view->render($response, 'agendamentos/tela_editar.html', [
+              'agendamento' => $row,
+              ]);
 })->setName('tela_editar_agendamento');
 
-$app->post('/editar_agendamento/{id}', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("Hello world!");
+$app->post('/editar_agendamento', function (Request $request, Response $response, $args) {
+    $data = $request->getParsedBody();    
+    $id = $data['id'];
+    $data = $data['data'];         
+    $mysqli = new mysqli("localhost", "root", "root", "agendamento");
+    $result = $mysqli->query("UPDATE agendamentos SET data = '".$data."' WHERE id = ".$id); 
+    $response->getBody()->write("ok <br> <a href='javascript:void(0)' onclick='history.go(-1)'>Voltar </a>");
     return $response;
 });
 
@@ -100,7 +108,8 @@ $app->get('/delete_agendamento/{id}', function (Request $request, Response $resp
     $id = $args['id'];
     $mysqli = new mysqli("localhost", "root", "root", "agendamento");
     $result = $mysqli->query("DELETE FROM agendamentos WHERE id = $id");
-    $response->getBody()->write("ok");
+    // $response->getBody()->write("ok");
+    $response->getBody()->write("ok <br> <a href='javascript:void(0)' onclick='history.go(-1)'>Voltar </a>");
     return $response;
 });
 
@@ -119,7 +128,8 @@ $app->get('/delete_lab/{id}', function (Request $request, Response $response, $a
     $id = $args['id'];
     $mysqli = new mysqli("localhost", "root", "root", "agendamento");
     $result = $mysqli->query("DELETE FROM laboratorios WHERE id = $id");
-    $response->getBody()->write("ok");
+    // $response->getBody()->write("ok");
+    $response->getBody()->write("ok <br> <a href='javascript:void(0) onclick='history.go(-1)>Voltar </a>");
     return $response;
 });
 

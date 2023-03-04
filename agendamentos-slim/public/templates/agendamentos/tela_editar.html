@@ -1,1 +1,5 @@
-ok editar agendamento
+<form action="/editar_agendamento" method="post">    
+    Data: <input type="date" name="data" value="{{agendamento.data}}">
+    <input type="hidden" name="id" value="{{agendamento.id}}">
+    <input type="submit">
+</form>
